@@ -293,7 +293,7 @@
     },
     {
       "parameters": {
-        "url": "https://api.telegram.org/bot7560844227:AAGHtwF5f5rtsoW7cJNFFkErahxjgJxf6Hg/getUpdates",
+        "url": "https://api.telegram.org/bot<BOT TOKEN>/getUpdates",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
