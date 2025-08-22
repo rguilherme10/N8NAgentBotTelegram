@@ -1,0 +1,666 @@
+{
+  "name": "Bot-Telegram",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2320,
+        480
+      ],
+      "id": "33ead566-30d1-41ba-b60b-2271ca83e80e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "hcfo5xIzgzItIfLq",
+          "mode": "list",
+          "cachedResultName": "Work-TelegramMessage"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "chat_id": "={{ $json.chat_id }}",
+            "message": "={{ $json.message }}",
+            "update_id": "={{ $json.update_id }}",
+            "first_name": "={{ $json.first_name }}",
+            "tipo_midia": "={{ $json.tipo_midia }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "update_id",
+              "displayName": "update_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "tipo_midia",
+              "displayName": "tipo_midia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        864
+      ],
+      "name": "Call Work-Message",
+      "id": "46750914-95fa-4d77-9d73-0abfa2e188fd",
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dfb09b5e-2288-4a1c-8c0a-abab1d606a16",
+              "name": "update_id",
+              "value": "={{ $json.update_id }}",
+              "type": "number"
+            },
+            {
+              "id": "f4f62f8b-95ac-4a1d-a95f-848be6eb19a9",
+              "name": "chat_id",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "f5cec6fb-34b8-45cd-8c23-e56036c7dee0",
+              "name": "first_name",
+              "value": "={{ $json.message.chat.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "75ce1778-f169-4435-a5d2-4cd656e90f74",
+              "name": "message",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "9d8943ff-2606-4e4b-9bf1-4f55eab734c1",
+              "name": "tipo_midia",
+              "value": "texto",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        592
+      ],
+      "id": "025277af-399d-4357-bc6b-37728fa501f0",
+      "name": "Formata-input"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        416
+      ],
+      "id": "1df861ba-1377-4dd0-9b81-e35651c3f735",
+      "name": "Split Out",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "de540211-aed2-4a57-b943-65a70f76c6d2",
+              "leftValue": "={{ $json.message.voice }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -368,
+        416
+      ],
+      "id": "57170eb1-5af1-45e7-842b-f66a718bac28",
+      "name": "Se-Eh-Audio"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        320
+      ],
+      "id": "763ad9d0-1484-4be0-901d-7e706f449201",
+      "name": "Download-Audio",
+      "webhookId": "a5b769a5-10e0-487f-b2d3-566082cd84bc",
+      "credentials": {
+        "telegramApi": {
+          "id": "R1iMzRoSrsX8BjeR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        48,
+        320
+      ],
+      "id": "e9caa3e7-db17-4ab1-ae98-1ab4c4619f18",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MD8jJwj2ccem0NWi",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bc67218a-802b-4cd3-8f83-373ff725cdd2",
+              "name": "message",
+              "value": "={{ $json.content.parts.first().text }}",
+              "type": "string"
+            },
+            {
+              "id": "6161b739-dd74-4edb-944f-44956ccd337f",
+              "name": "chat_id",
+              "value": "={{ $('Se-Eh-Audio').item.json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "83be196d-3b91-4d03-8d43-1e31158827f9",
+              "name": "first_name",
+              "value": "={{ $('Se-Eh-Audio').item.json.message.chat.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "82d9363c-bb6c-4bdc-ba3d-fa3315123c3b",
+              "name": "update_id",
+              "value": null,
+              "type": "number"
+            },
+            {
+              "id": "135d0cbe-c39c-4be4-af5d-2c457b84099b",
+              "name": "tipo_midia",
+              "value": "audio",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        320
+      ],
+      "id": "fbce8e32-141e-4b83-bfda-676288b4b0cd",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot7560844227:AAGHtwF5f5rtsoW7cJNFFkErahxjgJxf6Hg/getUpdates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "allowed_updates",
+              "value": "[\"message\"]"
+            },
+            {
+              "name": "offset",
+              "value": "={{ $json.update_id + 1 }}"
+            },
+            {
+              "name": "timeout",
+              "value": "30"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1136,
+        400
+      ],
+      "id": "ff38f942-e0cf-43db-955b-f33db9015f57",
+      "name": "Bot/GetUpdates(longpooling)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "updated_id",
+        "value": "={{ $('Consulta-update_id').item.json.update_id }}",
+        "keyType": "string"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1440,
+        400
+      ],
+      "id": "4692121d-51e6-401f-9ec9-8049487f681a",
+      "name": "Guarda-update_id",
+      "credentials": {
+        "redis": {
+          "id": "Liq351c0UKYqtOV8",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "update_id",
+        "value": "0",
+        "keyType": "string"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1728,
+        928
+      ],
+      "id": "bccfa189-5371-4bfd-a784-d550368459b7",
+      "name": "Guarda-update_id=0",
+      "credentials": {
+        "redis": {
+          "id": "Liq351c0UKYqtOV8",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "update_id",
+        "key": "update_id",
+        "keyType": "string",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        480
+      ],
+      "id": "b04e1ff2-3993-462d-86f0-012b0d903088",
+      "name": "Consulta-update_id",
+      "alwaysOutputData": false,
+      "credentials": {
+        "redis": {
+          "id": "Liq351c0UKYqtOV8",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5499b7c4-535d-473e-a41b-e7822d6fee52",
+              "leftValue": "={{ $json.update_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2f4b50cc-fd7e-4934-99b0-d171d1efd0b4",
+              "leftValue": "={{ $json.update_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1712,
+        480
+      ],
+      "id": "d7dad5e7-d724-4d7b-806e-db54a315f032",
+      "name": "Se-Nao-Existe-update_id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "714ca63e-d101-4d71-9e54-b7053fe5a5d2",
+              "leftValue": "={{ $json.result }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -912,
+        592
+      ],
+      "id": "94a36915-7604-4f0e-8220-3934c8a9bf2c",
+      "name": "Se-Tem-Mensagem"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Consulta-update_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata-input": {
+      "main": [
+        [
+          {
+            "node": "Call Work-Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Se-Eh-Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Work-Message": {
+      "main": [
+        [
+          {
+            "node": "Guarda-update_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se-Eh-Audio": {
+      "main": [
+        [
+          {
+            "node": "Download-Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata-input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download-Audio": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call Work-Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bot/GetUpdates(longpooling)": {
+      "main": [
+        [
+          {
+            "node": "Se-Tem-Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guarda-update_id": {
+      "main": [
+        [
+          {
+            "node": "Bot/GetUpdates(longpooling)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guarda-update_id=0": {
+      "main": [
+        [
+          {
+            "node": "Consulta-update_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta-update_id": {
+      "main": [
+        [
+          {
+            "node": "Se-Nao-Existe-update_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se-Nao-Existe-update_id": {
+      "main": [
+        [
+          {
+            "node": "Guarda-update_id=0",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guarda-update_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se-Tem-Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bot/GetUpdates(longpooling)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "67136817-065f-424e-b94e-59a69835e1b5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2643ec394f3a6300a1e0701395427b203d1a5c2efdd058771e8764a01e557c25"
+  },
+  "id": "lheK3J5Gmg39y0rc",
+  "tags": []
+}
